@@ -1,0 +1,22 @@
+{
+    "env": [
+        {
+            "title": "mkt01",
+            "live": "https://mkt01aem.creditone.com/",
+            "author": [],
+            "publisher": [],
+            "dispatcher": []
+        }
+    ],
+    "shortcuts": [
+        {
+            "title": "tools",
+            "paths": [
+                {
+                    "title": "",
+                    "url": ""
+                }
+            ]
+        }
+    ]
+}

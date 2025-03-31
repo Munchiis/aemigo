@@ -1,4 +1,5 @@
 //load all categories from sites.json
+//harrison comment
 
 //in event of clicking shortcut -> getcurrentab ->
 //create new url -> append shortcut pathname ->

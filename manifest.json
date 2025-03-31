@@ -1,0 +1,13 @@
+{
+    "manifest_version": 3,
+    "name": "AEMigo",
+    "version": "1.0.0",
+    "description": "A productivity tool for AEM developers",
+    "permissions": [
+        "storage"
+    ],
+    "background": {
+        "service_worker": "src/background.ts",
+        "type": "module"
+    }
+}

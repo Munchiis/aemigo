@@ -1,0 +1,21 @@
+{
+  "name": "aemigo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "description": "Productivity tool for AEM devs",
+  "keywords": [
+    "aem",
+    "adobe experience manager",
+    "chrome-extension",
+    "developer-tools"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^1.0.14",
+    "@types/chrome": "^0.0.313",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.4"
+  }
+}

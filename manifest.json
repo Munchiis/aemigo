@@ -4,10 +4,13 @@
     "version": "1.0.0",
     "description": "A productivity tool for AEM developers",
     "permissions": [
+        "activeTab",
+        "scripting",
         "storage"
     ],
-    "background": {
-        "service_worker": "src/background.ts",
-        "type": "module"
-    }
+    "action": {
+        "default_popup": "src/popup/popup.html",
+        "default_icon": "aemigo.jpg"
+    },
+    "options_page": "src/options.html",
 }

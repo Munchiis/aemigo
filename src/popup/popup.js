@@ -9,5 +9,4 @@ shortcut.forEach(async (element) => {
     const categoryHTML = `shortcut_${element.category}`
     const html = await chrome.storage.local.get(categoryHTML);
     document.body.innerHTML += html[categoryHTML];
-})
-
+});

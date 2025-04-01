@@ -11,19 +11,20 @@ async function initShortcuts() {
         const data = await response.json();
         const shortcutsMap = {};
 
-        chrome.storage.local.set({ 'sitesMap': data }, () => {
-            //stores within its own extension local storage
-        });
+        chrome.storage.local.set({ 'sitesMap': data });
         data.shortcuts.forEach(category => {
             const categoryGroup = []
             for (const path of category.paths) {
-                const pathObj = { ...path };
+                const url = new URL(path.url)
+                console.log(url)
+                const pathObj = { ...path, url: url.pathname };
                 categoryGroup.push(pathObj);
             }
             shortcutsMap[category.category] = categoryGroup
         });
 
         for (const [shortcut, value] of Object.entries(shortcutsMap)) {
+            console.log(shortcut, value)
             const html = `
             <div class="category-section">
                 <h2 class="category-title">${shortcut}</h2>
@@ -36,8 +37,8 @@ async function initShortcuts() {
                         </div>
                     `).join('')}
                 </div>
-            </div>
-            `;
+            </div>`;
+
             chrome.storage.local.set({ [`shortcut_${shortcut}`]: html });
         }
 

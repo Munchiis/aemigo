@@ -10,11 +10,29 @@
     ],
     "shortcuts": [
         {
-            "title": "tools",
+            "category": "tools",
             "paths": [
                 {
-                    "title": "",
-                    "url": ""
+                    "title": "AEM Tools",
+                    "url": "https://aemtools.netlify.app/"
+                }
+            ]
+        },
+        {
+            "category": "pages",
+            "paths": [
+                {
+                    "title": "AEM Tools",
+                    "url": "https://aemtools.netlify.app/"
+                }
+            ]
+        },
+        {
+            "category": "dispaer",
+            "paths": [
+                {
+                    "title": "AEM Tools",
+                    "url": "https://aemtools.netlify.app/"
                 }
             ]
         }

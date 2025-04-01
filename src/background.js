@@ -23,14 +23,21 @@ async function initShortcuts() {
             shortcutsMap[category.category] = categoryGroup
         });
 
-        //iterate through values of shortcuts map
         for (const [shortcut, value] of Object.entries(shortcutsMap)) {
-            //shortcut is an object so just grab
             const html = `
-            <div class="title">
-            <ul>${value.map(path => `<li><a href="${path.url}">${path.title}</a></li>`).join('')}</ul>
+            <div class="category-section">
+                <h2 class="category-title">${shortcut}</h2>
+                <div class="paths-container">
+                    ${value.map(path => `
+                        <div class="path-item">
+                            <a href="${path.url}" class="path-link">
+                                <div class="path-title">${path.title}</div>
+                            </a>
+                        </div>
+                    `).join('')}
+                </div>
             </div>
-            `
+            `;
             chrome.storage.local.set({ [`shortcut_${shortcut}`]: html });
         }
 

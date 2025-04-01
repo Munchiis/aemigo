@@ -3,9 +3,17 @@
         {
             "title": "mkt01",
             "live": "https://mkt01aem.creditone.com/",
-            "author": [],
-            "publisher": [],
-            "dispatcher": []
+            "author": [
+                "http://lv1mk01aemaut01:4502"
+            ],
+            "publisher": [
+                "http://lv1mk01aempub01:4503",
+                "http://lv1mk01aempub03:4503"
+            ],
+            "dispatcher": [
+                "https://lv1mk01aemdis03.c1b.corp",
+                "https://lv1mk01aemdis04.c1b.corp"
+            ]
         }
     ],
     "shortcuts": [
@@ -13,8 +21,8 @@
             "category": "tools",
             "paths": [
                 {
-                    "title": "AEM Tools",
-                    "url": "https://aemtools.netlify.app/"
+                    "title": "JCR",
+                    "url": "/jcr"
                 }
             ]
         },
@@ -28,7 +36,7 @@
             ]
         },
         {
-            "category": "dispaer",
+            "category": "dispatcher",
             "paths": [
                 {
                     "title": "AEM Tools",

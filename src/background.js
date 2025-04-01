@@ -26,14 +26,11 @@ async function initShortcuts() {
         //iterate through values of shortcuts map
         for (const [shortcut, value] of Object.entries(shortcutsMap)) {
             //shortcut is an object so just grab
-            console.log(shortcut)
-            console.log("value: ", value);
             const html = `
             <div class="title">
             <ul>${value.map(path => `<li><a href="${path.url}">${path.title}</a></li>`).join('')}</ul>
             </div>
             `
-
             chrome.storage.local.set({ [`shortcut_${shortcut}`]: html });
         }
 

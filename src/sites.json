@@ -21,8 +21,8 @@
             "category": "tools",
             "paths": [
                 {
-                    "title": "JCR",
-                    "url": "/jcr"
+                    "title": "AEM Tools",
+                    "url": "https://aemtools.netlify.app/path/to/url"
                 }
             ]
         },

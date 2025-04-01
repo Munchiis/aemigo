@@ -15,9 +15,7 @@ async function initShortcuts() {
         data.shortcuts.forEach(category => {
             const categoryGroup = []
             for (const path of category.paths) {
-                const url = new URL(path.url)
-                console.log(url)
-                const pathObj = { ...path, url: url.pathname };
+                const pathObj = { ...path };
                 categoryGroup.push(pathObj);
             }
             shortcutsMap[category.category] = categoryGroup
@@ -31,7 +29,7 @@ async function initShortcuts() {
                 <div class="paths-container">
                     ${value.map(path => `
                         <div class="path-item">
-                            <a href="${path.url}" class="path-link">
+                            <a data-href="${path.url}" class="path-link">
                                 <div class="path-title">${path.title}</div>
                             </a>
                         </div>

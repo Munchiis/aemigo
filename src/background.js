@@ -19,8 +19,8 @@ async function initShortcuts() {
             const html = `
             <div class="Shortcut__section">
                 <div class="Shortcut__category">
+                    <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="12px" height="12px" viewBox="0 0 554.472 554.472" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M342.097,59.144c-5.389-5.389-9.758-3.58-9.758,4.042v57.164c0,7.623-5.695,7.023-12.87,9.596 c-47.522,17.023-215.327,65.108-311.756-63.18c-4.581-6.092-8.002-5.08-7.693,2.537c7.02,174.224,142.743,346.714,315.465,355.26 c7.613,0.377,16.854-2.659,16.854,4.964v61.76c0,7.622,4.369,9.431,9.758,4.042l208.334-208.334 c5.389-5.389,5.389-14.128,0-19.517L342.097,59.144z"></path> </g> </g> </g></svg>
                     <h3 class="Shortcut__title">${shortcut}</h3>
-                    <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16px" height="16px" viewBox="0 0 554.472 554.472" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M342.097,59.144c-5.389-5.389-9.758-3.58-9.758,4.042v57.164c0,7.623-5.695,7.023-12.87,9.596 c-47.522,17.023-215.327,65.108-311.756-63.18c-4.581-6.092-8.002-5.08-7.693,2.537c7.02,174.224,142.743,346.714,315.465,355.26 c7.613,0.377,16.854-2.659,16.854,4.964v61.76c0,7.622,4.369,9.431,9.758,4.042l208.334-208.334 c5.389-5.389,5.389-14.128,0-19.517L342.097,59.144z"></path> </g> </g> </g></svg>
                 </div>
                 <div class="Shortcut__pathContainer">
                     ${value
@@ -28,7 +28,7 @@ async function initShortcuts() {
                             (path) => `
                         <div class="Shortcut__pathItem">
                             <a data-href="${path.url}" class="path-link">
-                                <div class="path-title">${path.title}</div>
+                                <div class="path-title"> - ${path.title}</div>
                             </a>
                         </div>
                     `

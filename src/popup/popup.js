@@ -75,8 +75,16 @@ async function redirect(selectedEnvs, envs, pathname, name) {
             tabIds.push(tab.id)
         }
     }
-    const group = await chrome.tabs.group({ tabIds })
-    await chrome.tabGroups.update(group, { color: 'blue', title: name });
+
+    const groups = await chrome.tabGroups.query({ title: name });
+
+    if (groups.length > 0) {
+        await chrome.tabs.group({ tabIds, groupId: groups[0].id });
+    } else {
+        const group = await chrome.tabs.group({ tabIds });
+        await chrome.tabGroups.update(group, { color: 'blue', title: name });
+    }
 }
+
 
 document.addEventListener('DOMContentLoaded', generateContent);

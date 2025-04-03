@@ -1,9 +1,22 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-   <title>Options</title>
+   <title>AEMigo Options</title>
+   <link rel="stylesheet" href="./options/options.css">
 </head>
 <body>
-    <textarea id="trustedSites" spellcheck="false" placeholder=""></textarea>
+   <h1>AEMigo Configuration</h1>
+   <div class="button-group">
+      <button id="saveButton">Save Changes</button>
+      <button id="exportButton">Export JSON</button>
+      <button id="importButton">Import JSON</button>
+      <input type="file" id="fileInput" accept=".json" style="display: none;">
+   </div>
+   <div id="status"></div>
+   <p class="note">Remember to click "Save Changes" after making modifications.</p>
+   <textarea id="jsonEditor" spellcheck="false"></textarea>
+
+   <script src="./options/options.js"></script>
+   <script src="./options/editor.js"></script>
 </body>
 </html>

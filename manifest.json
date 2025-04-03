@@ -8,7 +8,8 @@
         "scripting",
         "storage",
         "tabs",
-        "activeTab"
+        "activeTab",
+        "tabGroups"
     ],
     "action": {
         "default_popup": "src/popup/popup.html",

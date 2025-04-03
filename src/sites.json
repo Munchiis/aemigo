@@ -1,19 +1,38 @@
 {
-    "env": [
+    "servers": [
         {
             "title": "mkt01",
             "live": "https://mkt01aem.creditone.com/",
-            "author": [
-                "http://lv1mk01aemaut01:4502"
-            ],
-            "publisher": [
-                "http://lv1mk01aempub01:4503",
-                "http://lv1mk01aempub03:4503"
-            ],
-            "dispatcher": [
-                "https://lv1mk01aemdis03.c1b.corp",
-                "https://lv1mk01aemdis04.c1b.corp"
-            ]
+            "env": {
+                "author": [
+                    "http://lv1mk01aemaut01:4502"
+                ],
+                "publisher": [
+                    "http://lv1mk01aempub01:4503",
+                    "http://lv1mk01aempub03:4503"
+                ],
+                "dispatcher": [
+                    "https://lv1mk01aemdis03.c1b.corp",
+                    "https://lv1mk01aemdis04.c1b.corp"
+                ]
+            }
+        },
+        {
+            "title": "mkt02",
+            "live": "https://mkt02aem.creditone.com/",
+            "env": {
+                "author": [
+                    "http://lv1mk02aemaut01:4502"
+                ],
+                "publisher": [
+                    "http://lv1mk02aempub01:4503",
+                    "http://lv1mk02aempub03:4503"
+                ],
+                "dispatcher": [
+                    "https://lv1mk02aemdis03.c1b.corp",
+                    "https://lv1mk02aemdis04.c1b.corp"
+                ]
+            }
         }
     ],
     "shortcuts": [

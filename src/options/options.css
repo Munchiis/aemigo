@@ -1,6 +1,4 @@
 body {
-    min-width: 200px;
-    min-height: 200px;
     font-family: monospace;
     background-color: #1e1e1e;
     color: #d4d4d4;
@@ -48,4 +46,39 @@ a {
 
 .display {
     display: block;
+}
+
+/* Additional styles for options page elements */
+input, select, button, textarea {
+    background-color: #2d2d2d;
+    color: #d4d4d4;
+    border: 1px solid #3e3e3e;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+button {
+    cursor: pointer;
+    background-color: #3e3e3e;
+}
+
+button:hover {
+    background-color: #4e4e4e;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.option-section {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #3e3e3e;
+    border-radius: 4px;
+}
+
+h1, h2, h3 {
+    color: #d4d4d4;
 }

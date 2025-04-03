@@ -1,7 +1,11 @@
 async function initShortcuts() {
     try {
-        const response = await fetch(chrome.runtime.getURL('src/sites.json'));
-        const data = await response.json();
+        const { sitesMap = [] } = await chrome.storage.local.get('sitesMap');
+
+        const data = sitesMap.length === 0
+            ? await (await fetch(chrome.runtime.getURL('src/sites.json'))).json()
+            : sitesMap;
+
         const shortcutsMap = {};
 
         chrome.storage.local.set({ sitesMap: data });
@@ -24,16 +28,16 @@ async function initShortcuts() {
                 </div>
                 <div class="Shortcut__pathContainer">
                     ${value
-                        .map(
-                            (path) => `
+                    .map(
+                        (path) => `
                         <div class="Shortcut__pathItem">
                             <a data-href="${path.url}" class="path-link">
                                 <div class="path-title"> - ${path.title}</div>
                             </a>
                         </div>
                     `
-                        )
-                        .join('')}
+                    )
+                    .join('')}
                 </div>
             </div>`;
 
@@ -50,3 +54,12 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.runtime.onStartup.addListener(() => {
     initShortcuts();
 });
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log('action called', message)
+    if (message.action === 'reloadShortcuts') {
+        initShortcuts();
+    }
+    return true;
+});
+

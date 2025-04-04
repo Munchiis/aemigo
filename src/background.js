@@ -68,6 +68,48 @@ async function initShortcuts() {
     }
 }
 
+async function checkServerStatus(url, credentials) {
+    try {
+        if (url.includes(':4502') || url.includes(':4503')) {
+            const headers = {};
+            if (credentials && credentials.username && credentials.password) {
+                const authHeader = 'Basic ' + btoa(`${credentials.username}:${credentials.password}`);
+                headers['Authorization'] = authHeader;
+            }
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: headers,
+                redirect: 'manual',
+                credentials: 'include'
+            });
+
+            const isUp = response.ok || response.status === 302;
+            return {
+                isUp,
+                statusCode: response.status,
+                redirectUrl: response.redirected ? response.url : null
+            };
+        }
+        else {
+            const response = await fetch(url, {
+                method: 'GET',
+                redirect: 'manual',
+                credentials: 'include'
+            });
+
+            return {
+                isUp: true,
+                statusCode: response.status,
+                redirectUrl: response.redirected ? response.url : null
+            };
+        }
+    } catch (error) {
+        console.error(`Error checking ${url}:`, error);
+        return { isUp: false, statusCode: null, error: error.message };
+    }
+}
+
 chrome.runtime.onInstalled.addListener(() => {
     initShortcuts();
 });
@@ -76,10 +118,17 @@ chrome.runtime.onStartup.addListener(() => {
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log('action called', message)
+    console.log('action called', message);
     if (message.action === 'reloadShortcuts') {
         initShortcuts();
+    } else if (message.action === 'checkServerStatus') {
+        checkServerStatus(message.url, message.credentials)
+            .then(sendResponse)
+            .catch(error => {
+                console.error(`Error checking ${message.url}:`, error);
+                sendResponse({ isUp: false, statusCode: null, error: error.message });
+            });
+        return true;
     }
     return true;
 });
-

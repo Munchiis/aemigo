@@ -3,6 +3,7 @@
 <head>
    <title>AEMigo Options</title>
    <link rel="stylesheet" href="./options/options.css">
+   <link rel="stylesheet" href="./global.css">
 </head>
 <body>
    <h1>AEMigo Configuration</h1>
@@ -16,7 +17,30 @@
    <p class="note">Remember to click "Save Changes" after making modifications.</p>
    <textarea id="jsonEditor" spellcheck="false"></textarea>
 
+   <div class="OptionsContainer">
+      <div class="OptionsSection">
+         <h2>Login Credentials for Status Checks</h2>
+         <p>These credentials will be used to check AEM author and publisher instances.</p>
+         <div class="OptionsForm">
+            <div class="OptionsForm__field">
+               <label for="username">Username:</label>
+               <input type="text" id="username" name="username">
+            </div>
+            <div class="OptionsForm__field">
+               <label for="password">Password:</label>
+               <input type="password" id="password" name="password">
+            </div>
+            <button id="saveCredentials" class="OptionsButton">Save Credentials</button>
+         </div>
+      </div>
+
+      <div class="OptionsSection">
+         <h2>Server Status</h2>
+         <p>Check the status of all configured servers.</p>
+         <button id="checkServerStatus" class="OptionsButton">Check Server Status</button>
+      </div>
+   </div>
+
    <script src="./options/options.js"></script>
-   <script src="./options/editor.js"></script>
 </body>
 </html>

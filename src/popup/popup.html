@@ -6,12 +6,19 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="./popup.css" />
+  <link rel="stylesheet" href="../global.css" />
   <title>AEmigo</title>
 </head>
 
 <body class="Popup">
-  <script src="./popup.js" type="module"></script>
+
+  <div class="Popup__navButtons">
+    <button id="openOptions" class="Popup__navButton">⚙️ Configuration</button>
+    <button id="checkServerStatus" class="Popup__navButton">🔍 Server Status</button>
+  </div>
+
   <h2 class="Popup__subtitle">Environments</h2>
+
   <div class="Popup__envContainer">
     <input type="checkbox" name="author" id="author">
     <label for="author">Author</label>
@@ -29,6 +36,7 @@
     <div class="Popup__shortcutContainer">
     </div>
   </div>
+  <script src="./popup.js" type="module"></script>
 </body>
 
 </html>

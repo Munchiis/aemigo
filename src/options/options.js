@@ -93,3 +93,37 @@ function importSitesData(event) {
 
     event.target.value = '';
 }
+async function loadCredentials() {
+    const { loginCredentials } = await chrome.storage.local.get('loginCredentials');
+    if (loginCredentials) {
+        document.getElementById('username').value = loginCredentials.username || '';
+    }
+}
+
+async function saveCredentials() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    if (username && password) {
+        await chrome.storage.local.set({
+            loginCredentials: { username, password }
+        });
+        alert('Credentials saved successfully!');
+    } else {
+        alert('Please enter both username and password.');
+    }
+}
+
+function openStatusReport() {
+    chrome.tabs.create({
+        url: chrome.runtime.getURL('src/status-report.html')
+    });
+}
+
+document.getElementById('saveCredentials').addEventListener('click', saveCredentials);
+document.getElementById('checkServerStatus').addEventListener('click', openStatusReport);
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadSitesData();
+    loadCredentials();
+});

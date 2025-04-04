@@ -31,5 +31,9 @@
     "background": {
         "service_worker": "src/background.js",
         "type": "module"
-    }
+    },
+    "host_permissions": [
+        "http://*/*",
+        "https://*/*"
+    ]
 }

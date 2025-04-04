@@ -1,7 +1,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     updateTimestamp();
-
+    
     checkServerStatus();
 
     document.getElementById('refreshButton').addEventListener('click', checkServerStatus);

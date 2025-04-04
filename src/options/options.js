@@ -22,6 +22,18 @@ async function saveSitesData() {
     try {
         const jsonData = JSON.parse(jsonEditor.value);
 
+        if (jsonData.quickActions) {
+            jsonData.quickActions.forEach(category => {
+                if (category.actions && !category.paths) {
+                    category.paths = category.actions.map(action => ({
+                        title: action.title,
+                        url: action.urlModifier
+                    }));
+                    delete category.actions;
+                }
+            });
+        }
+
         await chrome.storage.local.set({ sitesMap: jsonData });
         chrome.runtime.sendMessage({ action: 'reloadShortcuts' });
 
@@ -55,6 +67,19 @@ function importSitesData(event) {
     reader.onload = async (e) => {
         try {
             const jsonData = JSON.parse(e.target.result);
+
+            if (jsonData.quickActions) {
+                jsonData.quickActions.forEach(category => {
+                    if (category.actions && !category.paths) {
+                        category.paths = category.actions.map(action => ({
+                            title: action.title,
+                            url: action.urlModifier
+                        }));
+                        delete category.actions;
+                    }
+                });
+            }
+
             jsonEditor.value = JSON.stringify(jsonData, null, 4);
 
             await chrome.storage.local.set({ sitesMap: jsonData });

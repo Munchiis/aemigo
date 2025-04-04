@@ -63,5 +63,75 @@
                 }
             ]
         }
+    ],
+    "quickActions": [
+        {
+            "category": "WCM Modes",
+            "paths": [
+                {
+                    "title": "Edit Mode",
+                    "url": "editor.html{path}"
+                },
+                {
+                    "title": "Preview Mode",
+                    "url": "editor.html{path}?wcmmode=preview"
+                },
+                {
+                    "title": "Disabled Mode",
+                    "url": "{path}?wcmmode=disabled"
+                }
+            ]
+        },
+        {
+            "category": "Content Management",
+            "paths": [
+                {
+                    "title": "Page Properties",
+                    "url": "editor.html{path}?wcmmode=disabled#properties"
+                }
+            ]
+        },
+        {
+            "category": "Developer Tools",
+            "paths": [
+                {
+                    "title": "CRXDE Lite",
+                    "url": "crx/de/index.jsp#/content{path}"
+                },
+                {
+                    "title": "Query Builder",
+                    "url": "libs/cq/search/content/querydebug.html"
+                },
+                {
+                    "title": "Client Libraries",
+                    "url": "libs/granite/ui/content/dumplibs.html"
+                },
+                {
+                    "title": "Show Clientlibs",
+                    "url": "{path}?debugClientLibs=true"
+                },
+                {
+                    "title": "Show Includes",
+                    "url": "{path}?debug=true"
+                }
+            ]
+        },
+        {
+            "category": "Cache Management",
+            "paths": [
+                {
+                    "title": "Flush Page",
+                    "url": "libs/granite/ui/content/sites/admin/page/activator.html{path}"
+                },
+                {
+                    "title": "Invalidate Cache",
+                    "url": "{path}?invalidate=true"
+                },
+                {
+                    "title": "Touch Content",
+                    "url": "bin/touchcontentservice.json{path}"
+                }
+            ]
+        }
     ]
 }

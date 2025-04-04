@@ -19,7 +19,6 @@ async function initShortcuts() {
         });
 
         for (const [shortcut, value] of Object.entries(shortcutsMap)) {
-            console.log(shortcut, value);
             const html = `
             <div class="Shortcut__section">
                 <div class="Shortcut__category">
@@ -42,6 +41,27 @@ async function initShortcuts() {
             </div>`;
 
             chrome.storage.local.set({ [`shortcut_${shortcut}`]: html });
+        }
+        if (data.quickActions) {
+            let quickActionsHtml = `<div class="QuickActions__container">`;
+
+            data.quickActions.forEach(category => {
+                quickActionsHtml += `
+                <div class="QuickActions__category">
+                    <h3 class="QuickActions__title">${category.category}</h3>
+                    <div class="QuickActions__buttons">
+                        ${category.paths.map(path => `
+                            <button class="QuickActions__button" data-url="${path.url}">
+                                ${path.title}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            quickActionsHtml += `</div>`;
+
+            chrome.storage.local.set({ 'quickActionsHtml': quickActionsHtml });
         }
     } catch (error) {
         console.error(error);

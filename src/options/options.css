@@ -1,44 +1,7 @@
 @import '../global.css';
-body {
-    font-family: monospace;
-    background-color: #3e3e3e;
-    color: #d4d4d4;
-    padding: 15px;
-    margin: 0;
-}
-
-.display {
-    display: block;
-}
 
 * {
     box-sizing: border-box;
-}
-
-.button-group {
-    margin-bottom: 20px;
-}
-
-.OptionsContainer {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.OptionsSection {
-    flex: 1;
-    min-width: 300px; /* Adjust as needed */
-}
-
-.OptionsForm {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.OptionsForm__field {
-    display: flex;
-    flex-direction: column;
 }
 
 textarea#jsonEditor {
@@ -50,24 +13,6 @@ textarea#jsonEditor {
     padding: 8px;
     border-radius: 4px;
     resize: vertical;
-    margin-bottom: 20px;
-}
-
-button, input, select, textarea {
-    background-color: #2d2d2d;
-    color: #d4d4d4;
-    border: 1px solid #3e3e3e;
-    padding: 8px;
-    border-radius: 4px;
-}
-
-button {
-    cursor: pointer;
-    background-color: #2d2d2d;
-}
-
-button:hover {
-    background-color: #4e4e4e;
 }
 
 label {

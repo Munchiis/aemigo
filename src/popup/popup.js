@@ -196,4 +196,26 @@ async function redirect(selectedEnvs, envs, pathname, name) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', generateContent);
+function openOptionsPage() {
+    chrome.runtime.openOptionsPage();
+}
+
+function openServerStatusReport() {
+    chrome.tabs.create({
+        url: chrome.runtime.getURL('src/status-report.html')
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    generateContent();
+
+    const optionsButton = document.getElementById('openOptions');
+    if (optionsButton) {
+        optionsButton.addEventListener('click', openOptionsPage);
+    }
+
+    const statusButton = document.getElementById('checkServerStatus');
+    if (statusButton) {
+        statusButton.addEventListener('click', openServerStatusReport);
+    }
+});

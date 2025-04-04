@@ -80,7 +80,6 @@ async function checkServerStatus(url, credentials) {
             const response = await fetch(url, {
                 method: 'GET',
                 headers: headers,
-                redirect: 'manual',
                 credentials: 'include'
             });
 
@@ -94,7 +93,6 @@ async function checkServerStatus(url, credentials) {
         else {
             const response = await fetch(url, {
                 method: 'GET',
-                redirect: 'manual',
                 credentials: 'include'
             });
 

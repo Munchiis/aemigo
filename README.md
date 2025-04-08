@@ -210,14 +210,6 @@ You can add custom environment types beyond the standard author/publisher/dispat
 ]
 ```
 
-## Best Practices
-
-1. **Organize by Environment**: Group your servers logically by environment (DEV, QA, PROD, etc.)
-2. **Meaningful Titles**: Use clear, descriptive titles for servers and shortcuts
-3. **Group Related Shortcuts**: Organize shortcuts into logical categories
-4. **Consistent Naming**: Use consistent naming conventions across all configurations
-5. **Regular Updates**: Keep your configuration updated as environments change
-
 ## Troubleshooting
 
 - **Server Status Shows Down**: Check if the server is actually running and if your network can access it

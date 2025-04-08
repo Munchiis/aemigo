@@ -1,0 +1,57 @@
+{
+    "defaults": {
+        "contentPathMapping": {
+            "rootPath": "/content/path/to/root",
+            "contentPrefix": "/content/path"
+        }
+    },
+    "servers": [
+        {
+            "title": "PROD",
+            "live": "https://www.example.com",
+            "env": {
+                "author": [
+                    "http://author.example.com:4502"
+                ],
+                "publisher": [
+                    "http://publish1.example.com:4503",
+                    "http://publish2.example.com:4503"
+                ],
+                "dispatcher": [
+                    "https://dispatcher1.example.com",
+                    "https://dispatcher2.example.com"
+                ]
+            }
+        }
+    ],
+    "shortcuts": [
+        {
+            "category": "Development Tools",
+            "paths": [
+                {
+                    "title": "CRXDE Lite",
+                    "url": "/crx/de/index.jsp"
+                },
+                {
+                    "title": "Package Manager",
+                    "url": "/crx/packmgr/index.jsp"
+                }
+            ]
+        }
+    ],
+    "quickActions": [
+        {
+            "category": "WCM Modes",
+            "paths": [
+                {
+                    "title": "Edit Mode",
+                    "url": "/editor.html{path}.html"
+                },
+                {
+                    "title": "Disabled Mode",
+                    "url": "{path}.html?wcmmode=disabled"
+                }
+            ]
+        }
+    ]
+}

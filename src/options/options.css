@@ -1,26 +1,82 @@
 @import '../global.css';
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.section {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: var(--bg-secondary);
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
 }
 
 textarea#jsonEditor {
-    width: 100%;
-    height: 400px;
-    background-color: #2d2d2d;
-    color: #d4d4d4;
-    border: 1px solid #3e3e3e;
-    padding: 8px;
-    border-radius: 4px;
-    resize: vertical;
+  width: 100%;
+  height: 400px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 12px;
+  border-radius: 4px;
+  resize: vertical;
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 label {
-    display: block;
-    margin-top: 10px;
-    margin-bottom: 5px;
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+  font-weight: 500;
 }
 
 h1, h2, h3 {
-    color: #d4d4d4;
+  color: var(--text-primary);
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+button {
+  padding: 8px 16px;
+  background-color: var(--accent-blue);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background-color: #8ab4d8;
+}
+
+input[type="text"], input[type="password"] {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.credentials-section {
+  margin-top: 20px;
+}
+
+#fileInput {
+  display: none;
 }

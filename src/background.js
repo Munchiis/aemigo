@@ -1,132 +1,252 @@
-async function initShortcuts() {
+let sitesMap = null;
+let serverTabGroups = {};
+
+chrome.runtime.onInstalled.addListener(async () => {
+    await loadSitesData();
+});
+
+chrome.tabs.onRemoved.addListener(async (tabId, removeInfo) => {
+    await cleanupEmptyGroups();
+});
+
+async function cleanupEmptyGroups() {
     try {
-        const { sitesMap = [] } = await chrome.storage.local.get('sitesMap');
-
-        const data = sitesMap.length === 0
-            ? await (await fetch(chrome.runtime.getURL('src/sites.json'))).json()
-            : sitesMap;
-
-        const shortcutsMap = {};
-
-        chrome.storage.local.set({ sitesMap: data });
-        data.shortcuts.forEach((category) => {
-            const categoryGroup = [];
-            for (const path of category.paths) {
-                const pathObj = { ...path };
-                categoryGroup.push(pathObj);
+        const tabGroups = await chrome.tabGroups.query({});
+        
+        for (const serverTitle in serverTabGroups) {
+            const groupId = serverTabGroups[serverTitle];
+            if (!tabGroups.some(group => group.id === groupId)) {
+                delete serverTabGroups[serverTitle];
             }
-            shortcutsMap[category.category] = categoryGroup;
-        });
-
-        for (const [shortcut, value] of Object.entries(shortcutsMap)) {
-            const html = `
-            <div class="Shortcut__section">
-                <div class="Shortcut__category">
-                    <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="12px" height="12px" viewBox="0 0 554.472 554.472" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M342.097,59.144c-5.389-5.389-9.758-3.58-9.758,4.042v57.164c0,7.623-5.695,7.023-12.87,9.596 c-47.522,17.023-215.327,65.108-311.756-63.18c-4.581-6.092-8.002-5.08-7.693,2.537c7.02,174.224,142.743,346.714,315.465,355.26 c7.613,0.377,16.854-2.659,16.854,4.964v61.76c0,7.622,4.369,9.431,9.758,4.042l208.334-208.334 c5.389-5.389,5.389-14.128,0-19.517L342.097,59.144z"></path> </g> </g> </g></svg>
-                    <h3 class="Shortcut__title">${shortcut}</h3>
-                </div>
-                <div class="Shortcut__pathContainer">
-                    ${value
-                    .map(
-                        (path) => `
-                        <div class="Shortcut__pathItem">
-                            <a data-href="${path.url}" class="path-link">
-                                <div class="path-title"> - ${path.title}</div>
-                            </a>
-                        </div>
-                    `
-                    )
-                    .join('')}
-                </div>
-            </div>`;
-
-            chrome.storage.local.set({ [`shortcut_${shortcut}`]: html });
-        }
-        if (data.quickActions) {
-            let quickActionsHtml = `<div class="QuickActions__container">`;
-
-            data.quickActions.forEach(category => {
-                quickActionsHtml += `
-                <div class="QuickActions__category">
-                    <h3 class="QuickActions__title">${category.category}</h3>
-                    <div class="QuickActions__buttons">
-                        ${category.paths.map(path => `
-                            <button class="QuickActions__button" data-url="${path.url}">
-                                ${path.title}
-                            </button>
-                        `).join('')}
-                    </div>
-                </div>`;
-            });
-
-            quickActionsHtml += `</div>`;
-
-            chrome.storage.local.set({ 'quickActionsHtml': quickActionsHtml });
         }
     } catch (error) {
-        console.error(error);
+        console.error('Error cleaning up empty groups:', error);
     }
+}
+
+async function loadSitesData() {
+    const data = await chrome.storage.local.get('sitesMap');
+    if (data.sitesMap) {
+        sitesMap = data.sitesMap;
+    } else {
+        try {
+            const response = await fetch(chrome.runtime.getURL('src/sites.json'));
+            sitesMap = await response.json();
+            await chrome.storage.local.set({ sitesMap });
+        } catch (error) {
+            console.error('Error loading default sites.json:', error);
+        }
+    }
+}
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === 'reloadShortcuts') {
+        loadSitesData();
+    } else if (message.action === 'openShortcut') {
+        handleOpenShortcut(message);
+    } else if (message.action === 'openQuickAction') {
+        handleOpenQuickAction(message);
+    } else if (message.action === 'openServerUrls') {
+        handleOpenServerUrls(message);
+    } else if (message.action === 'checkServerStatus') {
+        checkServerStatus(message.url, message.credentials)
+            .then(sendResponse)
+            .catch(error => sendResponse({ isUp: false, statusCode: null, error: error.message }));
+        return true;
+    }
+});
+
+function handleOpenShortcut(message) {
+    const { shortcutUrl, serverUrl, serverTitle, multiServer, serverSelections } = message;
+
+    if (multiServer && serverSelections) {
+        for (const serverTitle in serverSelections) {
+            const envTypes = serverSelections[serverTitle];
+            if (envTypes.length === 0) continue;
+
+            const server = sitesMap.servers.find(s => s.title === serverTitle);
+            if (!server) continue;
+
+            const urls = [];
+            envTypes.forEach(envType => {
+                if (!server.env[envType] || server.env[envType].length === 0) return;
+
+                server.env[envType].forEach(url => {
+                    const finalUrl = `${url}${shortcutUrl}`;
+                    urls.push(finalUrl);
+                });
+            });
+
+            if (urls.length > 0) {
+                addTabsToServerGroup(urls, serverTitle);
+            }
+        }
+    } else {
+        const finalUrl = `${serverUrl}${shortcutUrl}`;
+        addTabsToServerGroup([finalUrl], serverTitle);
+    }
+}
+
+function handleOpenQuickAction(message) {
+    const { quickActionUrl, serverUrl, serverTitle, originalPath, multiServer, serverSelections } = message;
+
+    if (multiServer && serverSelections) {
+        for (const serverTitle in serverSelections) {
+            const envTypes = serverSelections[serverTitle];
+            if (envTypes.length === 0) continue;
+
+            const server = sitesMap.servers.find(s => s.title === serverTitle);
+            if (!server) continue;
+
+            const urls = [];
+            envTypes.forEach(envType => {
+                if (!server.env[envType] || server.env[envType].length === 0) return;
+
+                server.env[envType].forEach(url => {
+                    const effectiveContentPath = determineContentPath(originalPath || "/");
+                    const finalUrl = `${url}${quickActionUrl.replace('{path}', effectiveContentPath)}`;
+                    urls.push(finalUrl);
+                });
+            });
+
+            if (urls.length > 0) {
+                addTabsToServerGroup(urls, serverTitle);
+            }
+        }
+    } else {
+        const effectiveContentPath = determineContentPath(originalPath || "/");
+        const finalUrl = `${serverUrl}${quickActionUrl.replace('{path}', effectiveContentPath)}`;
+        addTabsToServerGroup([finalUrl], serverTitle);
+    }
+}
+
+function determineContentPath(originalPath) {
+    console.log("Original Path:", originalPath);
+    if (!originalPath || originalPath === "/" || originalPath === "") {
+        return sitesMap.defaults.contentPathMapping.rootPath;
+    } else {
+        const pathWithoutLeadingSlash = originalPath.startsWith('/') ? originalPath.substring(1) : originalPath;
+        return `${sitesMap.defaults.contentPathMapping.contentPrefix}/${pathWithoutLeadingSlash}`;
+    }
+}
+
+function handleOpenServerUrls(message) {
+    const { serverSelections } = message;
+
+    for (const serverTitle in serverSelections) {
+        const envTypes = serverSelections[serverTitle];
+        if (envTypes.length === 0) continue;
+
+        const server = sitesMap.servers.find(s => s.title === serverTitle);
+        if (!server) continue;
+
+        const urls = [];
+        envTypes.forEach(envType => {
+            if (!server.env[envType] || server.env[envType].length === 0) return;
+
+            server.env[envType].forEach(url => {
+                urls.push(url);
+            });
+        });
+
+        if (urls.length > 0) {
+            addTabsToServerGroup(urls, serverTitle);
+        }
+    }
+}
+
+async function addTabsToServerGroup(urls, serverTitle) {
+    const tabIds = [];
+
+    for (const url of urls) {
+        const tab = await chrome.tabs.create({ url, active: false });
+        tabIds.push(tab.id);
+    }
+
+    if (tabIds.length === 0) return;
+
+    if (serverTabGroups[serverTitle]) {
+        try {
+            await chrome.tabs.group({
+                tabIds: tabIds,
+                groupId: serverTabGroups[serverTitle]
+            });
+            return;
+        } catch (error) {
+            console.log(`Group for ${serverTitle} no longer exists, creating new group`);
+            delete serverTabGroups[serverTitle];
+        }
+    }
+
+    const groupId = await chrome.tabs.group({ tabIds: tabIds });
+    await chrome.tabGroups.update(groupId, { 
+        title: serverTitle, 
+        color: getColorForServer(serverTitle) 
+    });
+    
+    serverTabGroups[serverTitle] = groupId;
+}
+
+function getContentPath(url) {
+    try {
+        const parsedUrl = new URL(url);
+        const pathname = parsedUrl.pathname;
+
+        if (pathname && pathname !== "/" && pathname !== "/content") {
+            return pathname;
+        }
+
+        if (pathname === "/") {
+            return sitesMap.defaults.contentPathMapping.rootPath;
+        }
+
+        return sitesMap.defaults.contentPathMapping.contentPrefix;
+    } catch (error) {
+        console.error("Error parsing URL:", error);
+        if (sitesMap && sitesMap.defaults && sitesMap.defaults.contentPathMapping) {
+            return sitesMap.defaults.contentPathMapping.rootPath;
+        }
+        return "/content";
+    }
+}
+
+function getColorForServer(serverName) {
+    const colors = ['blue', 'red', 'yellow', 'green', 'pink', 'purple', 'cyan', 'orange', 'grey'];
+
+    let hash = 0;
+    for (let i = 0; i < serverName.length; i++) {
+        hash = serverName.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    const colorIndex = Math.abs(hash) % colors.length;
+    return colors[colorIndex];
 }
 
 async function checkServerStatus(url, credentials) {
     try {
-        if (url.includes(':4502') || url.includes(':4503')) {
-            const headers = {};
-            if (credentials && credentials.username && credentials.password) {
-                const authHeader = 'Basic ' + btoa(`${credentials.username}:${credentials.password}`);
-                headers['Authorization'] = authHeader;
-            }
+        const cacheBuster = `?cacheBuster=${Date.now()}`;
+        const urlWithCacheBuster = url.includes('?') ? `${url}&cacheBuster=${Date.now()}` : `${url}${cacheBuster}`;
 
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: headers,
-                credentials: 'include'
-            });
+        const response = await fetch(urlWithCacheBuster, {
+            method: 'GET',
+            headers: credentials ? {
+                'Authorization': 'Basic ' + btoa(`${credentials.username}:${credentials.password}`)
+            } : {},
+            signal: AbortSignal.timeout(5000)
+        });
 
-            const isUp = response.ok || response.status === 302;
-            return {
-                isUp,
-                statusCode: response.status,
-                redirectUrl: response.redirected ? response.url : null
-            };
-        }
-        else {
-            const response = await fetch(url, {
-                method: 'GET',
-                credentials: 'include'
-            });
-
-            return {
-                isUp: true,
-                statusCode: response.status,
-                redirectUrl: response.redirected ? response.url : null
-            };
-        }
+        return {
+            isUp: response.ok,
+            statusCode: response.status
+        };
     } catch (error) {
         console.error(`Error checking ${url}:`, error);
-        return { isUp: false, statusCode: null, error: error.message };
+        return {
+            isUp: false,
+            statusCode: null,
+            error: error.message
+        };
     }
 }
 
-chrome.runtime.onInstalled.addListener(() => {
-    initShortcuts();
-});
-chrome.runtime.onStartup.addListener(() => {
-    initShortcuts();
-});
-
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log('action called', message);
-    if (message.action === 'reloadShortcuts') {
-        initShortcuts();
-    } else if (message.action === 'checkServerStatus') {
-        checkServerStatus(message.url, message.credentials)
-            .then(sendResponse)
-            .catch(error => {
-                console.error(`Error checking ${message.url}:`, error);
-                sendResponse({ isUp: false, statusCode: null, error: error.message });
-            });
-        return true;
-    }
-    return true;
-});
+loadSitesData();

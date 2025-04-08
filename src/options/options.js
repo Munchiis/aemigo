@@ -22,6 +22,21 @@ async function saveSitesData() {
     try {
         const jsonData = JSON.parse(jsonEditor.value);
 
+        if (!jsonData.servers || !Array.isArray(jsonData.servers)) {
+            throw new Error("JSON must contain a 'servers' array");
+        }
+
+        if (!jsonData.defaults) {
+            jsonData.defaults = {};
+        }
+
+        if (!jsonData.defaults.contentPathMapping) {
+            jsonData.defaults.contentPathMapping = {
+                rootPath: "/content/path",
+                contentPrefix: "/content"
+            };
+        }
+
         if (jsonData.quickActions) {
             jsonData.quickActions.forEach(category => {
                 if (category.actions && !category.paths) {
@@ -37,8 +52,11 @@ async function saveSitesData() {
         await chrome.storage.local.set({ sitesMap: jsonData });
         chrome.runtime.sendMessage({ action: 'reloadShortcuts' });
 
+        alert('Settings saved successfully!');
+
     } catch (error) {
-        console.error(error)
+        console.error(error);
+        alert(`Error saving settings: ${error.message}`);
     }
 }
 
@@ -55,7 +73,8 @@ function exportSitesData() {
 
         URL.revokeObjectURL(url);
     } catch (error) {
-        console.error(error)
+        console.error(error);
+        alert(`Error exporting settings: ${error.message}`);
     }
 }
 
@@ -67,6 +86,21 @@ function importSitesData(event) {
     reader.onload = async (e) => {
         try {
             const jsonData = JSON.parse(e.target.result);
+
+            if (!jsonData.servers || !Array.isArray(jsonData.servers)) {
+                throw new Error("Imported JSON must contain a 'servers' array");
+            }
+
+            if (!jsonData.defaults) {
+                jsonData.defaults = {};
+            }
+
+            if (!jsonData.defaults.contentPathMapping) {
+                jsonData.defaults.contentPathMapping = {
+                    rootPath: "/content/path",
+                    contentPrefix: "/content"
+                };
+            }
 
             if (jsonData.quickActions) {
                 jsonData.quickActions.forEach(category => {
@@ -85,14 +119,18 @@ function importSitesData(event) {
             await chrome.storage.local.set({ sitesMap: jsonData });
             chrome.runtime.sendMessage({ action: 'reloadShortcuts' });
 
+            alert('Settings imported successfully!');
+
         } catch (error) {
-            console.error(error)
+            console.error(error);
+            alert(`Error importing settings: ${error.message}`);
         }
     };
     reader.readAsText(file);
 
     event.target.value = '';
 }
+
 async function loadCredentials() {
     const { loginCredentials } = await chrome.storage.local.get('loginCredentials');
     if (loginCredentials) {
@@ -120,8 +158,8 @@ function openStatusReport() {
     });
 }
 
-document.getElementById('saveCredentials').addEventListener('click', saveCredentials);
-document.getElementById('checkServerStatus').addEventListener('click', openStatusReport);
+document.getElementById('saveCredentials')?.addEventListener('click', saveCredentials);
+document.getElementById('checkServerStatus')?.addEventListener('click', openStatusReport);
 
 document.addEventListener('DOMContentLoaded', () => {
     loadSitesData();

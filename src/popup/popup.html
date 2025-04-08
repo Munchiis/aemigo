@@ -1,42 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="./popup.css" />
-  <link rel="stylesheet" href="../global.css" />
-  <title>AEmigo</title>
+  <meta charset="UTF-8">
+  <title>AEMigo</title>
+  <link rel="stylesheet" href="popup.css">
 </head>
 
-<body class="Popup">
+<body>
+  <div class="popup-container">
+    <div class="server-section">
+      <div class="action-row">
+        <button id="openOptions" class="OptionsButton">⚙️ Configuration</button>
+        <button id="checkServerStatus" class="OptionsButton">🔍 Server Status</button>
+      </div>
+      <div id="serverGrid" class="server-grid"></div>
+      <div class="action-row">
+        <button id="openSelectedBtn" disabled>Open Selected</button>
+        <button id="clearSelectionsBtn" disabled>Clear Selections</button>
+      </div>
 
-  <div class="button-group">
-    <button id="openOptions" class="OptionsButton">⚙️ Configuration</button>
-    <button id="checkServerStatus" class="OptionsButton">🔍 Server Status</button>
-  </div>
 
-  <h2 class="Popup__subtitle">Environments</h2>
 
-  <div class="Popup__envContainer">
-    <input type="checkbox" name="author" id="author">
-    <label for="author">Author</label>
-    <input type="checkbox" name="publisher" id="publisher">
-    <label for="publisher">Publisher</label>
-    <input type="checkbox" name="dispatcher" id="dispatcher">
-    <label for="dispatcher">Dispatcher</label>
-  </div>
-  <div class="Popup__quickActionsContainer">
-    <div class="QuickActions__container">
+      <label class="multi-server-option">
+        <input type="checkbox" id="multiServerCheckbox">
+        Open tools on all selected servers
+      </label>
+    </div>
+
+    <div class="tools-section">
+      <div class="quick-actions">
+        <h2>Quick Actions</h2>
+        <div id="quickActionsContainer"></div>
+      </div>
+
+      <div class="shortcuts">
+        <h2>Shortcuts</h2>
+        <div id="shortcutsContainer"></div>
+      </div>
     </div>
   </div>
-  <div class="Popup__shortcutContainer">
-    <h2 class="Popup__subtitle">Shortcuts</h2>
-    <div class="Popup__shortcutContainer">
-    </div>
-  </div>
-  <script src="./popup.js" type="module"></script>
+
+  <script src="popup.js"></script>
 </body>
 
 </html>

@@ -2,52 +2,135 @@
     margin: 15px 0;
     display: grid;
     gap: 20px;
-}
-
-.ServerStatus {
-    background: #2d2d2d;
+  }
+  
+  .ServerStatus {
+    background: var(--bg-secondary, #fff);
     padding: 15px;
-    border-radius: 4px;
-}
-
-.ServerStatus h2 {
-    color: #d4d4d4;
+    border-radius: 6px;
+    border: 1px solid var(--border-color, #ddd);
+    box-shadow: 0 2px 4px var(--shadow-color, rgba(0,0,0,0.1));
+  }
+  
+  .ServerStatus h2 {
+    color: var(--text-primary, #333);
     margin: 0 0 15px;
-}
-
-.ServerStatus__env {
+    font-size: 18px;
+    border-bottom: 1px solid var(--border-color, #ddd);
+    padding-bottom: 8px;
+  }
+  
+  .ServerStatus h3 {
+    color: var(--text-primary, #333);
+    margin: 12px 0 8px;
+    font-size: 16px;
+  }
+  
+  .ServerStatus__group {
+    margin-bottom: 15px;
+  }
+  
+  .ServerStatus__env {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px;
-    margin: 5px 0;
-    font-size: 12px;
+    gap: 12px;
+    padding: 10px;
+    margin: 6px 0;
+    font-size: 13px;
+    border-radius: 4px;
     border-left: 4px solid transparent;
-}
-
-.ServerStatus__env.is-up {
-    border-left-color: #2ecc71;
-    background: #1e3a2d;
-}
-
-.ServerStatus__env.is-down {
-    border-left-color: #e74c3c;
-    background: #3a1e1e;
-}
-
-.ServerStatus__label {
+  }
+  
+  .ServerStatus__env.is-up {
+    border-left-color: var(--accent-green, #52c41a);
+    background: rgba(181, 230, 181, 0.2);
+  }
+  
+  .ServerStatus__env.is-down {
+    border-left-color: var(--accent-red, #f5222d);
+    background: rgba(247, 198, 198, 0.2);
+  }
+  
+  .ServerStatus__env.is-loading {
+    border-left-color: var(--accent-blue, #1890ff);
+    background: rgba(230, 247, 255, 0.2);
+  }
+  
+  .ServerStatus__label {
     font-weight: bold;
-}
-
-.ServerStatus__url {
+    color: var(--text-primary, #333);
+  }
+  
+  .ServerStatus__url {
     flex: 1;
-}
-
-.ServerStatus__status {
+    color: var(--text-secondary, #666);
+  }
+  
+  .ServerStatus__status {
     min-width: 60px;
-}
-
-.ServerStatus__code {
+    font-weight: bold;
+  }
+  
+  .ServerStatus__code {
     min-width: 50px;
     text-align: right;
-}
+    color: var(--text-secondary, #666);
+  }
+  
+  .loading {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-secondary, #666);
+  }
+  
+  .StatusReport__error {
+    background-color: var(--accent-red, #f5222d);
+    color: var(--text-primary, #fff);
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+  }
+  
+  /* Skeleton loading styles */
+  .skeleton {
+    animation: pulse 1.5s infinite ease-in-out;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+  }
+  
+  .skeleton-text {
+    height: 14px;
+    margin: 6px 0;
+    width: 100%;
+  }
+  
+  .skeleton-text.short {
+    width: 60%;
+  }
+  
+  .skeleton-text.medium {
+    width: 80%;
+  }
+  
+  .skeleton-server {
+    height: 18px;
+    margin-bottom: 15px;
+    width: 30%;
+  }
+  
+  .skeleton-env {
+    height: 36px;
+    margin: 6px 0;
+    width: 100%;
+  }
+  
+  @keyframes pulse {
+    0% {
+      background-position: 0% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+  

@@ -5,7 +5,6 @@
     "description": "A productivity tool for AEM developers",
     "permissions": [
         "activeTab",
-        "scripting",
         "storage",
         "tabs",
         "activeTab",
